@@ -6,8 +6,7 @@ jobs:
       - image: "cimg/python:3.8.11"
     steps:
       - checkout
-      - run: cd phonemapper
-      - run: python3 phonemapper.py
+      - run: cd phonemapper; python3 phonemapper.py
   test:
     docker:
       - image: "cimg/python:3.8.11"

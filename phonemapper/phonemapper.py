@@ -4,7 +4,8 @@ import json
 import itertools
 
 def load_map(map_file):
-    return json.load(open (map_file, 'r'))
+    with open(map_file, 'r') as o:
+        return json.load(o)
     
 def map_phoneme(mapping, phoneme):
     try:
@@ -13,7 +14,8 @@ def map_phoneme(mapping, phoneme):
         return '<UNK>'
 
 def read_in_data(in_file):
-    return next(itertools.islice(csv.reader(open(in_file, 'r')), 0, None))
+    with open(in_file,'r') as o:
+        return list(csv.reader(o, delimiter=','))
 
 def write_to_csv(open_file, line):
     open_file.write(line)
@@ -35,13 +37,12 @@ def main():
     in_file = 'alessia.csv'
     data = read_in_data(in_file)
     out_file = 'alessia_with_cmu.csv'
-    global ipa_to_cmu_map
     ipa_to_cmu_map = invert_mapping(cmu_to_ipa_map)
     missing_phonemes = set()
     with open(out_file, 'w+') as o:
         for row in data:
             word, ipa, cmu, missing_phonemes = map_row(ipa_to_cmu_map, row, missing_phonemes)
             write_to_csv(o, f'{word}, {ipa}, {cmu}\n')
-            
+
 if __name__ == '__main__':
     main()

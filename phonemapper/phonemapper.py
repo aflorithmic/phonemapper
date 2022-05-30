@@ -8,8 +8,8 @@ import itertools
 def load_map(map_file):
         return json.load(open (map_file, 'r'))
     
-def map_phoneme(map, phoneme):
-    return map[phoneme]
+def map_phoneme(mapping, phoneme):
+    return mapping[phoneme]
 
 def read_in_data(in_file):
     return next(itertools.islice(csv.reader(open(in_file, 'r')), 0, None))
@@ -19,20 +19,26 @@ def write_to_csv(open_file, line):
 
 def catch_except(func, *args, handle=lambda e : '<UNK>', **kwargs):
     try:
-        return func(*args, **kwargs)
+        return args[0][0][args[0][-1]]
+        # return func(*args, **kwargs)
     except Exception as e:
-        # print(args[0][-1])
-        # if __name__ == "__main__":
-        missing_phonemes.add(args[0][-1])
         return handle(e)
+
 
 def invert_mapping(map_dict):
     return {value:key for key, value in map_dict.items()}
 
-def map_row(map, row):
+def map_row(mapping, row, missing_phonemes):
     word = row[0]
     ipa = row[1].translate(str.maketrans('', '', string.punctuation))
-    return word, ipa, ' '.join([catch_except(map_phoneme, (map, phoneme)) for phoneme in ipa])
+    # for phoneme in ipa:
+    #     print(map_phoneme(mapping, phoneme))
+    #     print(catch_except(map_phoneme, (mapping, phoneme)))
+        # print('phoneme=',phoneme, 'len_phoneme=', len(phoneme))#, 'mapped=',catch_except(map_phoneme, (mapping, phoneme)))
+    before_after = [[phoneme, catch_except(map_phoneme, (mapping, phoneme))] for phoneme in ipa]
+    missing_phonemes = missing_phonemes.union({item[0] for item in before_after if item[1]=='<UNK>'})
+    mapped= ' '.join([item[1] for item in before_after])
+    return word, ipa, mapped, missing_phonemes
 
 def main():
     map_file = 'cmu_to_ipa.json'
@@ -42,15 +48,10 @@ def main():
     out_file = 'alessia_with_cmu.csv'
     global ipa_to_cmu_map
     ipa_to_cmu_map = invert_mapping(cmu_to_ipa_map)
-    global missing_phonemes
     missing_phonemes = set()
     with open(out_file, 'w+') as o:
         for row in data:
-            word, ipa, cmu = map_row(ipa_to_cmu_map, row)
+            word, ipa, cmu, missing_phonemes = map_row(ipa_to_cmu_map, row)
             write_to_csv(o, f'{word}, {ipa}, {cmu}\n')
-    # print(missing_phonemes)
 if __name__ == '__main__':
     main()
-    # change dictionary to ipa-to-cmu to remove ambiguities
-    # read in IPA to CMU mapping from separate file
-    # add CMU to IPA mapping functionality

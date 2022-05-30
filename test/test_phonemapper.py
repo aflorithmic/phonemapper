@@ -14,9 +14,9 @@ class TestMap(unittest.TestCase):
         cls.word = cls.test_row[0]
         cls.ipa = cls.test_row[1]
         cls.map_ipa_cmu = pm.invert_mapping(cls.map_cmu_ipa)
+        cls.missing_phonemes = set()
 
     def test_map_load(self):
-        # print('ok')
         self.assertEqual(self.map_cmu_ipa['W'], 'w', "Should be 'fuck'")
 
     def test_word_expected(self):
@@ -26,10 +26,10 @@ class TestMap(unittest.TestCase):
         self.assertEqual(self.ipa, 'hɛləʊ', "Should be 'hɛləʊ'")
 
     def test_converter(self):
-        self.assertEqual(pm.map_phoneme(self.map_ipa_cmu, "ʒ"), 'ZH', "Should be 'ZH")
+        self.assertEqual(pm.map_phoneme(self.map_ipa_cmu, "h"), 'HH', "Should be 'HH")
     
     def test_full_conversion(self):
-        self.assertEqual(pm.map_row(self.map_ipa_cmu, self.test_row), 'HH <EH> L AH0 <UH>', "Should be 'HH <EH> L AH0 <UH>'")
+        self.assertEqual(pm.map_row(self.map_ipa_cmu, self.test_row, self.missing_phonemes)[2], 'HH <EH> L AH0 <UH>', "Should be 'HH <EH> L AH0 <UH>'")
 
 if __name__ == '__main__':
     TEST_DIR = os.path.dirname(os.path.abspath(__file__))

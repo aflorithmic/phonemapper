@@ -35,7 +35,6 @@ def map_row(map, row):
     return word, ipa, ' '.join([catch_except(map_phoneme, (map, phoneme)) for phoneme in ipa])
 
 def main():
-    # with open ('cmu_to_ipa.json', 'r') as open_map:
     map_file = 'cmu_to_ipa.json'
     cmu_to_ipa_map = load_map(map_file)
     in_file = 'alessia.csv'
@@ -52,14 +51,6 @@ def main():
     # print(missing_phonemes)
 if __name__ == '__main__':
     main()
-
-
     # change dictionary to ipa-to-cmu to remove ambiguities
     # read in IPA to CMU mapping from separate file
     # add CMU to IPA mapping functionality
-
-
-
-    # testing
-    # write tests in this file first - to start of main()
-    # add -test mode 

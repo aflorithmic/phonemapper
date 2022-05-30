@@ -21,7 +21,7 @@ class TestMap(unittest.TestCase):
         cls.missing_phonemes = set()
 
     def test_map_load(self):
-        self.assertEqual(self.map_cmu_ipa['W'], 'w', "Should be 'fuck'")
+        self.assertEqual(self.map_cmu_ipa['W'], 'w', "Should be 'w'")
 
     def test_word_expected(self):
         self.assertEqual(self.word, 'hello', "Should be 'hello'")

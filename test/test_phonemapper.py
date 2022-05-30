@@ -1,14 +1,10 @@
 import unittest
-import phonemap
-from phonemap import phonemap as pm
+import phonemapper
+from phonemapper import phonemapper as pm
 import os
 
 class TestMap(unittest.TestCase):
 
-    # def __init__(self, *args, **kwargs):
-    #     unittest.TestCase.__init__(self,*args,**kwargs)
-    #     self.gen_stubs()
-    #     self.map_cmu_ipa = pm.load_map(os.path.join(TEST_DIR,'test_cmu_to_ipa.json'))
     @classmethod
     def setUpClass(cls):
         cls.TEST_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,9 +14,6 @@ class TestMap(unittest.TestCase):
         cls.word = cls.test_row[0]
         cls.ipa = cls.test_row[1]
         cls.map_ipa_cmu = pm.invert_mapping(cls.map_cmu_ipa)
-
-    # remove the above thigns to tests where possible
-    # e.g. test load_map works properly
 
     def test_map_load(self):
         # print('ok')

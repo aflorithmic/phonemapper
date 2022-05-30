@@ -2,6 +2,7 @@ import unittest
 import phonemapper
 from phonemapper import phonemapper as pm
 import os
+import itertools
 
 class TestMap(unittest.TestCase):
 
@@ -10,9 +11,12 @@ class TestMap(unittest.TestCase):
         cls.TEST_DIR = os.path.dirname(os.path.abspath(__file__))
         cls.map_cmu_ipa = pm.load_map(os.path.join(cls.TEST_DIR,'test_cmu_to_ipa.json'))
         cls.data = pm.read_in_data(os.path.join(cls.TEST_DIR,'test_data.csv'))
-        cls.test_row = cls.data
+        cls.test_row = next(itertools.islice(cls.data, 0, 1)) 
+        print('test_row=', cls.test_row)
         cls.word = cls.test_row[0]
+        print('word=', cls.word)
         cls.ipa = cls.test_row[1]
+        print('ipa=', cls.ipa)
         cls.map_ipa_cmu = pm.invert_mapping(cls.map_cmu_ipa)
         cls.missing_phonemes = set()
 

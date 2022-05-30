@@ -26,6 +26,7 @@ def invert_mapping(map_dict):
 def map_row(mapping, row, missing_phonemes):
     word = row[0]
     ipa = row[1].translate(str.maketrans('', '', string.punctuation))
+    print(ipa)
     before_after = [[phoneme, map_phoneme(mapping, phoneme)] for phoneme in ipa]
     missing_phonemes = missing_phonemes.union({item[0] for item in before_after if item[1]=='<UNK>'})
     mapped= ' '.join([item[1] for item in before_after])

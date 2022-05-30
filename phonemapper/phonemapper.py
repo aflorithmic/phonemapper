@@ -51,7 +51,7 @@ def main():
     missing_phonemes = set()
     with open(out_file, 'w+') as o:
         for row in data:
-            word, ipa, cmu, missing_phonemes = map_row(ipa_to_cmu_map, row)
+            word, ipa, cmu, missing_phonemes = map_row(ipa_to_cmu_map, row, missing_phonemes)
             write_to_csv(o, f'{word}, {ipa}, {cmu}\n')
 if __name__ == '__main__':
     main()

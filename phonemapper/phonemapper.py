@@ -6,10 +6,13 @@ import itertools
 # this mapping is only useful as a helper for manual transcribing. since CMU tokens map to multiple IPA phones, ambiguous ones are 
 
 def load_map(map_file):
-        return json.load(open (map_file, 'r'))
+    return json.load(open (map_file, 'r'))
     
 def map_phoneme(mapping, phoneme):
-    return mapping[phoneme]
+    try:
+        return mapping[phoneme]
+    except:
+        return '<UNK>'
 
 def read_in_data(in_file):
     return next(itertools.islice(csv.reader(open(in_file, 'r')), 0, None))
@@ -35,7 +38,7 @@ def map_row(mapping, row, missing_phonemes):
     #     print(map_phoneme(mapping, phoneme))
     #     print(catch_except(map_phoneme, (mapping, phoneme)))
         # print('phoneme=',phoneme, 'len_phoneme=', len(phoneme))#, 'mapped=',catch_except(map_phoneme, (mapping, phoneme)))
-    before_after = [[phoneme, catch_except(map_phoneme, (mapping, phoneme))] for phoneme in ipa]
+    before_after = [[phoneme, map_phoneme(mapping, phoneme)] for phoneme in ipa]
     missing_phonemes = missing_phonemes.union({item[0] for item in before_after if item[1]=='<UNK>'})
     mapped= ' '.join([item[1] for item in before_after])
     return word, ipa, mapped, missing_phonemes
